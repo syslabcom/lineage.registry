@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from Acquisition import aq_parent
 from persistent import Persistent
 from plone.app.registry import Registry
@@ -7,6 +8,7 @@ from plone.registry.interfaces import IRegistry
 from plone.registry.registry import _Records
 from zope.component import getSiteManager
 import warnings
+import six
 
 _MARKER = object()
 REGISTRY_NAME = 'lineage_registry'
@@ -148,9 +150,9 @@ class LineageRecords(_Records):
         field = self._fields.get(name, _MARKER)
         if field is _MARKER:
             return self.parents._getField(name)
-        if isinstance(field, basestring):
+        if isinstance(field, six.string_types):
             recordName = field
-            while isinstance(field, basestring):
+            while isinstance(field, six.string_types):
                 recordName = field
                 field = self._fields[recordName]
             field = FieldRef(recordName, field)
